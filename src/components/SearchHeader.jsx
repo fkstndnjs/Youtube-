@@ -20,16 +20,18 @@ export default function SearchHeader() {
   useEffect(() => setText(keyword || ""), [keyword]);
 
   return (
-    <header>
-      {/* 유튜브 로고, 유튜브 글자를 누르면 "/"로 라우팅 */}
-      <Link to="/">
-        <BsYoutube />
-        <h1>YouTube</h1>
+    <header className="w-full flex p-4 text-2xl border-b border-zinc-600">
+      {/* 유튜브 로고 */}
+      {/* 유튜브 로고를 누르면 "/"로 라우팅 */}
+      <Link to="/" className="flex items-center">
+        <BsYoutube className="text-4xl text-brand" />
+        <h1 className="font-bold ml-2 text-3xl">YouTube</h1>
       </Link>
 
       {/* 검색창 */}
-      <form onSubmit={handleSubmit}>
+      <form className="w-full flex justify-center" onSubmit={handleSubmit}>
         <input
+          className="w-7/12 p-2 outline-none bg-black text-gray-50"
           type="text"
           placeholder="Search..."
           value={text}
@@ -37,7 +39,7 @@ export default function SearchHeader() {
             setText(e.target.value);
           }}
         />
-        <button>
+        <button className="bg-zinc-600 px-4 rounded-lg">
           <BsSearch />
         </button>
       </form>
