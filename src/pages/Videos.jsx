@@ -6,30 +6,24 @@ import axios from "axios";
 
 export default function Videos() {
   const { keyword } = useParams();
-  const temp = useQuery(["videos", keyword], async () => {
-    const data = await axios
+  const {
+    isLoading,
+    error,
+    data: videos,
+  } = useQuery(["videos", keyword], async () => {
+    return axios
       .get(`/videos/${keyword ? "search" : "popular"}.json`)
       .then((res) => res.data.items);
-    console.log("🚀 --------------🚀");
-    console.log("🚀 ~ data", data);
-    console.log("🚀 --------------🚀");
-
-    return data;
   });
-
-  // axios
-  //   .get(`/videos/${keyword ? "search" : "popular"}.json`)
-  //   .then((res) => console.log(res.data.items));
 
   return (
     <>
       <div>Videos {keyword ? `🔍${keyword}` : "🔥"}</div>
-      {temp.isLoading && <p>Loading...</p>}
-
-      {temp.error && <p>Something is wrong 😖</p>}
-      {temp.videos && (
+      {isLoading && <p>Loading...</p>}
+      {error && <p>Something is wrong 😖</p>}
+      {videos && (
         <ul>
-          {temp.videos.map((video) => (
+          {videos.map((video) => (
             <VideoCard key={video.id} video={video} />
           ))}
         </ul>
