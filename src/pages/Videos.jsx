@@ -5,35 +5,32 @@ import VideoCard from "../components/VideoCard";
 import axios from "axios";
 
 export default function Videos() {
-  const { keyword } = useParams();
-  const temp = useQuery(["videos", keyword], async () => {
-    const data = await axios
-      .get(`/videos/${keyword ? "search" : "popular"}.json`)
-      .then((res) => res.data.items);
-    console.log("🚀 --------------🚀");
-    console.log("🚀 ~ data", data);
-    console.log("🚀 --------------🚀");
+    const { keyword } = useParams();
+    const {
+        isLoading,
+        error,
+        data: videos,
+    } = useQuery(["videos", keyword], async () => {
+        const temp = await axios.get(
+            `/videos/${keyword ? "search" : "popular"}.json`
+        );
 
-    return data;
-  });
+        return temp.data.items;
+    });
 
-  // axios
-  //   .get(`/videos/${keyword ? "search" : "popular"}.json`)
-  //   .then((res) => console.log(res.data.items));
+    return (
+        <>
+            <div>Videos {keyword ? `🔍${keyword}` : "🔥"}</div>
+            {isLoading && <p>Loading...</p>}
 
-  return (
-    <>
-      <div>Videos {keyword ? `🔍${keyword}` : "🔥"}</div>
-      {temp.isLoading && <p>Loading...</p>}
-
-      {temp.error && <p>Something is wrong 😖</p>}
-      {temp.videos && (
-        <ul>
-          {temp.videos.map((video) => (
-            <VideoCard key={video.id} video={video} />
-          ))}
-        </ul>
-      )}
-    </>
-  );
+            {error && <p>Something is wrong 😖</p>}
+            {videos && (
+                <ul>
+                    {videos.map((video) => (
+                        <VideoCard key={video.id} video={video} />
+                    ))}
+                </ul>
+            )}
+        </>
+    );
 }
